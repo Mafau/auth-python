@@ -1,12 +1,8 @@
 import os
 from app.main import create_app
-from flask import request, escape
+from app import blueprint
 
-app = create_app(os.getenv('ENVIRONMENT') or 'dev')
+app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
+app.register_blueprint(blueprint)
 
-
-@app.route('/')
-def hello():
-    name = request.args.get("name", "World")
-    return f'Hello, {escape(name)}!'
-
+app.app_context().push()

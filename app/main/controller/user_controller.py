@@ -18,22 +18,22 @@ class UserList(Resource):
 
     @api.response(201, 'User successfully created.')
     @api.doc('create a new user')
-    @api.expect(_user, validate=True)
+    @api.expect(_user, validate=False)
     def post(self):
         """Creates a new User """
         data = request.json
         return save_new_user(data=data)
 
 
-@api.route('/<public_id>')
-@api.param('public_id', 'The User identifier')
+@api.route('/<id>')
+@api.param('id', 'The User identifier')
 @api.response(404, 'User not found.')
 class User(Resource):
     @api.doc('get a user')
     @api.marshal_with(_user)
-    def get(self, public_id):
+    def get(self, id):
         """get a user given its identifier"""
-        user = get_a_user(public_id)
+        user = get_a_user(id)
         if not user:
             api.abort(404)
         else:

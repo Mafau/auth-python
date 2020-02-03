@@ -6,19 +6,21 @@ from ..services.user_service import save_new_user, get_all_users, get_a_user
 
 api = UserDto.api
 _user = UserDto.user
+_user_form = UserDto.user_form
 
 
 @api.route('/')
 class UserList(Resource):
     @api.doc('list_of_registered_users')
-    @api.marshal_list_with(_user, envelope='data')
+    @api.marshal_list_with(UserDto.user, envelope='data')
     def get(self):
         """List all registered users"""
         return get_all_users()
 
     @api.response(201, 'User successfully created.')
     @api.doc('create a new user')
-    @api.expect(_user, validate=False)
+    @api.expect(_user_form, validate=True)
+    @api.marshal_with(_user)
     def post(self):
         """Creates a new User """
         data = request.json

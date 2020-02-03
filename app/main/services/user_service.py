@@ -1,6 +1,6 @@
 import uuid
 import datetime
-
+from flask import jsonify
 from app.main import db
 from app.main.model.user import User
 
@@ -15,11 +15,8 @@ def save_new_user(data):
             lastname=data['lastname']
         )
         save_changes(new_user)
-        response_object = {
-            'status': 'success',
-            'message': 'Successfully registered.'
-        }
-        return response_object, 201
+        db.session.refresh(new_user)
+        return new_user, 201
     else:
         response_object = {
             'status': 'fail',
